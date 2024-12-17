@@ -1,0 +1,1118 @@
+{
+    "openapi":"3.0.3",
+    "info": {
+      "title":"Meals APP RESTful API",
+      "description": "API Spec for Meals APP RESTful API",
+      "version":"1.0"
+    },
+    "servers": [
+      {"url":"https://localhost:3000/api"}
+    ],
+    "paths": {
+        "/login":{
+            "post":{
+                "tags": ["Auth API"],
+                "description": "Login with JWT authentication",
+                "summary": "Login",
+                "requestBody":{
+                    "required": true,
+                    "content": {
+                        "application/json":{
+                            "schema":{
+                                "type": "object",
+                                "properties": {
+                                    "email":{
+                                        "type": "string"
+                                    },
+                                    "password":{
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200":{
+                        "description": "Login success",
+                        "content": {
+                            "application/json":{
+                                "schema":{
+                                    "type": "object",
+                                    "properties": {
+                                        "code":{
+                                            "type": "number"
+                                        },
+                                        "status":{
+                                            "type": "string"
+                                        },
+                                        "data":{
+                                            "type":"object",
+                                            "properties": {
+                                                "token":{
+                                                    "type": "string"
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/register":{
+            "post":{
+                "tags": ["Users API"],
+                "description": "User Registration with Hashing Password",
+                "summary": "Register",
+                "requestBody":{
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "username":{
+                                        "type": "string"
+                                    },
+                                    "email":{
+                                        "type": "string",
+                                        "uniqueItems": true
+                                    },
+                                    "password":{
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Registration success",
+                        "content": {
+                            "application/json":{
+                                "schema":{
+                                    "type": "object",
+                                    "properties": {
+                                        "code":{
+                                            "type": "number"
+                                        },
+                                        "status":{
+                                            "type": "string"
+                                        },
+                                        "data":{
+                                            "$ref": "#/components/schemas/UserResponses"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/users":{
+            "get":{
+                "tags": ["Users API"],
+                "security": [{
+                    "bearerAuth": []
+                }],
+                "description": "Get profile account information",
+                "summary": "Profile",
+                "responses": {
+                    "200":{
+                        "description": "Success get profile account information",
+                        "content": {
+                            "application/json":{
+                                "schema":{
+                                    "type": "object",
+                                    "properties": {
+                                        "code":{
+                                            "type": "number"
+                                        },
+                                        "status":{
+                                            "type": "string"
+                                        },
+                                        "data":{
+                                            "$ref": "#/components/schemas/UserResponses"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401":{
+                        "description": "Unauthorize",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UnauthorizeResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put":{
+                "tags": ["Users API"],
+                "security": [{
+                    "bearerAuth": []
+                }],
+                "description": "Update profile account information",
+                "summary": "Update Profile",
+                "requestBody":{
+                    "description": "at least there must be 1 updated",
+                    "required": true,
+                    "content": {
+                        "application/json":{
+                            "schema":{
+                                "type": "object",
+                                "properties": {
+                                    "username":{
+                                        "type": "string"
+                                    },
+                                    "email":{
+                                        "type": "string",
+                                        "uniqueItems": true
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200":{
+                        "description": "Success get profile account information",
+                        "content": {
+                            "application/json":{
+                                "schema":{
+                                    "type": "object",
+                                    "properties": {
+                                        "code":{
+                                            "type": "number"
+                                        },
+                                        "status":{
+                                            "type": "string"
+                                        },
+                                        "data":{
+                                            "$ref": "#/components/schemas/UserResponses"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401":{
+                        "description": "Unauthorize",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UnauthorizeResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/users/change-password":{
+            "put":{
+                "tags": ["Users API"],
+                "security": [{
+                    "bearerAuth":[]
+                }],
+                "description": "Update password account ",
+                "summary": "Update password",
+                "requestBody":{
+                    "required": true,
+                    "content": {
+                        "application/json":{
+                            "schema":{
+                                "type": "object",
+                                "properties": {
+                                    "password":{
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200":{
+                        "description": "Success update password account",
+                        "content": {
+                            "application/json":{
+                                "schema":{
+                                    "type": "object",
+                                    "properties": {
+                                        "code":{
+                                            "type": "number"
+                                        },
+                                        "status":{
+                                            "type": "string"
+                                        },
+                                        "data":{
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401":{
+                        "description": "Unauthorize",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UnauthorizeResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/users/image":{
+            "put":{
+                "tags": ["Users API"],
+                "security": [{
+                    "bearerAuth":[]
+                }],
+                "description": "Update image profile user ",
+                "summary": "Update image profile",
+                "requestBody":{
+                    "required": true,
+                    "content": {
+                        "multipart/form-data":{
+                            "schema":{
+                                "type":"object",
+                                "properties":{
+                                    "image":{
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses":{
+                    "200":{
+                        "description": "Success update image profile",
+                        "content": {
+                            "application/json":{
+                                "schema":{
+                                    "type": "object",
+                                    "properties": {
+                                        "code":{
+                                            "type": "number"
+                                        },
+                                        "status":{
+                                            "type": "string"
+                                        },
+                                        "data":{
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401":{
+                        "description": "Unauthorize",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                   "$ref": "#/components/schemas/UnauthorizeResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/meals":{
+            "post":{
+                "tags": ["Meals API"],
+                "security": [{
+                    "bearerAuth":[]
+                }],
+                "description": "Create meal recipe",
+                "summary": "Create meal",
+                "requestBody":{
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "name":{
+                                        "type": "string"
+                                    },
+                                    "category":{
+                                        "type": "string",
+                                        "enum": ["food", "drink"]
+                                    },
+                                    "image":{
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "ingredients":{
+                                        "type": "array"
+                                    },
+                                    "steps":{
+                                        "type": "array"
+                                    },
+                                    "duration":{
+                                        "type": "string",
+                                        "format": "duration"
+                                    },
+                                    "complexity":{
+                                        "type": "string",
+                                        "enum": ["simple", "challenging", "hard"]
+                                    },
+                                    "affordability":{
+                                        "type": "string",
+                                        "enum": ["affordable", "pricey", "luxurious"]
+                                    },
+                                    "is_gluten_free":{
+                                        "type": "boolean"
+                                    },
+                                    "is_lactose_free":{
+                                        "type": "boolean"
+                                    },
+                                    "is_vegan":{
+                                        "type": "boolean"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Meal created successfully",
+                        "content": {
+                            "application/json":{
+                                "schema":{
+                                    "type": "object",
+                                    "properties": {
+                                        "code":{
+                                            "type": "number"
+                                        },
+                                        "status":{
+                                            "type": "string"
+                                        },
+                                        "data":{
+                                            "$ref": "#/components/schemas/MealResponses"
+                                        }
+                                   }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorize",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UnauthorizeResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "get":{
+                "tags": ["Meals API"],
+                "security": [{
+                    "bearerAuth":[]
+                }],
+                "description": "Find all meal recipes",
+                "summary": "Find all meal recipes",
+                "responses": {
+                    "200":{
+                        "description": "Meal recipes found successfully",
+                        "content": {
+                            "application/json":{
+                                "schema":{
+                                    "type": "array",
+                                    "items":{
+                                        "type": "object",
+                                        "properties": {
+                                            "code":{
+                                            "type": "number"
+                                            },
+                                            "status":{
+                                                "type": "string"
+                                            },
+                                            "data":{
+                                                "$ref": "#/components/schemas/MealResponses"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorize",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UnauthorizeResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/meals/{id}":{
+            "get":{
+                "tags": ["Meals API"],
+                "security": [{
+                    "bearerAuth":[]
+                }],
+                "parameters": [{
+                    "$ref": "#/components/parameters/MealId"
+                }],
+                "description": "Find a meal recipe by id",
+                "summary": "Find a meal recipe by id",
+                "responses": {
+                    "200":{
+                        "description": "Meal recipe found successfully",
+                        "content": {
+                            "application/json":{
+                                "schema":{
+                                    "type": "object",
+                                    "properties": {
+                                        "code":{
+                                            "type": "number"
+                                        },
+                                        "status":{
+                                            "type": "string"
+                                        },
+                                        "data":{
+                                            "$ref": "#/components/schemas/MealResponses"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorize",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UnauthorizeResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404":{
+                        "description": "Meal not found",
+                        "content": {
+                            "application/json":{
+                                "schema":{
+                                    "$ref": "#/components/schemas/MealRecipeNotFound"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put":{
+                "tags": ["Meals API"],
+                "security": [{
+                    "bearerAuth":[]
+                }],
+                "parameters": [{
+                    "$ref": "#/components/parameters/MealId"
+                }],
+                "description": "Update meal recipe by id",
+                "summary": "Update meal recipe by id",
+                "requestBody": {
+                    "description": "at least there must be 1 updated",
+                    "required": true,
+                    "content": {
+                        "application/json":{
+                            "schema":{
+                                "type": "object",
+                                "properties": {
+                                    "name":{
+                                        "type": "string"
+                                    },
+                                    "category":{
+                                        "type": "string",
+                                        "enum": ["food", "drink"]
+                                    },
+                                    "ingredients":{
+                                        "type": "array"
+                                    },
+                                    "steps":{
+                                        "type": "array"
+                                    },
+                                    "duration":{
+                                        "type": "string",
+                                        "format": "duration"
+                                    },
+                                    "complexity":{
+                                        "type": "string",
+                                        "enum": ["simple", "challenging", "hard"]
+                                    },
+                                    "affordability":{
+                                        "type": "string",
+                                        "enum": ["affordable", "pricey", "luxurious"]
+                                    },
+                                    "is_gluten_free":{
+                                        "type": "boolean"
+                                    },
+                                    "is_lactose_free":{
+                                        "type": "boolean"
+                                    },
+                                    "is_vegan":{
+                                        "type": "boolean"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Recipe updated successfully",
+                        "content": {
+                            "application/json":{
+                                "schema":{
+                                    "type": "object",
+                                    "properties": {
+                                        "code":{
+                                            "type": "number"
+                                        },
+                                        "status":{
+                                            "type": "string"
+                                        },
+                                        "data":{
+                                            "$ref": "#/components/schemas/MealResponses"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorize",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UnauthorizeResponse"
+                                }
+                            }
+                        }
+                    },
+                    "403":{
+                        "description": "Forbidden",
+                        "content": {
+                            "application/json":{
+                                "schema":{
+                                    "$ref": "#/components/schemas/ForbiddenResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404":{
+                        "description": "Meal not found",
+                        "content": {
+                            "application/json":{
+                                "schema":{
+                                    "$ref": "#/components/schemas/MealRecipeNotFound"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete":{
+                "tags": ["Meals API"],
+                "security": [{
+                    "bearerAuth":[]
+                }],
+                "parameters": [{
+                    "$ref": "#/components/parameters/MealId"
+                }],
+                "description": "Delete meal recipe by id",
+                "summary": "Delete meal recipe by id",
+                "responses": {
+                    "200": {
+                        "description": "Recipe deleted successfully",
+                        "content": {
+                            "application/json":{
+                                "schema":{
+                                    "type": "object",
+                                    "properties": {
+                                        "code":{
+                                            "type": "number"
+                                        },
+                                        "status":{
+                                            "type": "string"
+                                        },
+                                        "data":{
+                                            "type":  "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorize",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UnauthorizeResponse"
+                                }
+                            }
+                        }
+                    },
+                    "403":{
+                        "description": "Forbidden",
+                        "content": {
+                            "application/json":{
+                                "schema":{
+                                    "$ref": "#/components/schemas/ForbiddenResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404":{
+                        "description": "Meal not found",
+                        "content": {
+                            "application/json":{
+                                "schema":{
+                                    "$ref": "#/components/schemas/MealRecipeNotFound"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/meals/{id}/image":{
+            "put":{
+                "tags": ["Meals API"],
+                "security": [{
+                    "bearerAuth":[]
+                }],
+                "parameters": [{
+                    "$ref": "#/components/parameters/MealId"
+                }],
+                "description": "Update image meal recipe",
+                "summary": "Update image meal recipe",
+                "requestBody":{
+                    "description": "Update image meal recipe",
+                    "required": true,
+                    "content": {
+                        "multipart/form-data":{
+                            "schema":{
+                                "type":"object",
+                                "properties":{
+                                    "image":{
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Image meal recipe updated successfully",
+                        "content": {
+                            "application/json":{
+                                "schema":{
+                                    "type": "object",
+                                    "properties": {
+                                        "code":{
+                                            "type": "number"
+                                        },
+                                        "status":{
+                                            "type": "string"
+                                        },
+                                        "data":{
+                                            "$ref": "#/components/schemas/MealResponses"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorize",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UnauthorizeResponse"
+                                }
+                            }
+                        }
+                    },
+                    "403":{
+                        "description": "Forbidden",
+                        "content": {
+                            "application/json":{
+                                "schema":{
+                                    "$ref": "#/components/schemas/ForbiddenResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404":{
+                        "description": "Meal not found",
+                        "content": {
+                            "application/json":{
+                                "schema":{
+                                    "$ref": "#/components/schemas/MealRecipeNotFound"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/meals/{id}/favorites":{
+            "post":{
+                "tags": ["Meals API"],
+                "security": [{
+                    "bearerAuth":[]
+                }],
+                "parameters": [{
+                    "$ref": "#/components/parameters/MealId"
+                }],
+                "description": "Add meal recipe to favorites",
+                "summary": "Add meal recipe to favorites",
+                "responses": {
+                    "200": {
+                        "description": "Add meal recipe to favorites successfully",
+                        "content": {
+                            "application/json":{
+                                "schema":{
+                                    "type": "object",
+                                    "properties": {
+                                        "code":{
+                                            "type": "number"
+                                        },
+                                        "status":{
+                                            "type": "string"
+                                        },
+                                        "data":{
+                                            "$ref": "#/components/schemas/MealResponses"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorize",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UnauthorizeResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404":{
+                        "description": "Meal not found",
+                        "content": {
+                            "application/json":{
+                                "schema":{
+                                    "$ref": "#/components/schemas/MealRecipeNotFound"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete":{
+                "tags": ["Meals API"],
+                "security": [{
+                    "bearerAuth":[]
+                }],
+                "parameters": [{
+                    "$ref": "#/components/parameters/MealId"
+                }],
+                "description": "Delete meal recipe from favorites",
+                "summary": "Delete meal recipe from favorites",
+                "responses": {
+                    "200": {
+                        "description": "Deleted meal recipe to favorites successfully",
+                        "content": {
+                            "application/json":{
+                                "schema":{
+                                    "type": "object",
+                                    "properties": {
+                                        "code":{
+                                            "type": "number"
+                                        },
+                                        "status":{
+                                            "type": "string"
+                                        },
+                                        "data":{
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorize",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UnauthorizeResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404":{
+                        "description": "Meal not found",
+                        "content": {
+                            "application/json":{
+                                "schema":{
+                                    "$ref": "#/components/schemas/MealRecipeNotFound"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/users/favorites":{
+            "get":{
+                "tags": ["Users API"],
+                "security": [{
+                    "bearerAuth":[]
+                }],
+                "description": "Get all favorites",
+                "summary": "Get all favorites",
+                "responses": {
+                    "200": {
+                        "description": "Get all favorites successfully",
+                        "content": {
+                            "application/json":{
+                                "schema":{
+                                    "type": "object",
+                                    "properties": {
+                                        "code":{
+                                            "type": "number"
+                                        },
+                                        "status":{
+                                            "type": "string"
+                                        },
+                                        "data":{
+                                            "type": "array",
+                                            "items":{
+                                                "$ref": "#/components/schemas/MealResponses"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorize",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UnauthorizeResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "parameters": {
+            "MealId":{
+                "name": "id",
+                "description": "Meal recipe ID",
+                "schema":{
+                    "type": "integer"
+                },
+                "in": "path",
+                "required": true
+            }
+        },
+        "schemas": {
+            "UserResponses":{
+                "type": "object",
+                "properties": {
+                    "id":{
+                        "type": "integer"
+                    },
+                    "username":{
+                        "type": "string"
+                    },
+                    "email":{
+                        "type": "string"
+                    },
+                    "role":{
+                        "type": "string",
+                        "default": "user"
+                    },
+                    "user_image_url":{
+                        "type": "string",
+                        "default":"https://th.bing.com/th/id/OIP.R9HMSxN_IRyxw9-iE1usugAAAA?rs=1&pid=ImgDetMain"
+                    },
+                    "created_at":{
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updated_at":{
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                }
+            },
+            "MealResponses":{
+                "type": "object",
+                "properties": {
+                    "id":{
+                        "type": "number",
+                        "uniqueItems": true
+                    },
+                    "name":{
+                        "type": "string"
+                    },
+                    "category":{
+                        "type": "string",
+                        "enum": ["food", "drink"]
+                    },
+                    "image_url":{
+                        "type": "string",
+                        "format": "binary"
+                    },
+                    "ingredients":{
+                        "type": "array",
+                        "items": {}
+                    },
+                    "steps":{
+                        "type": "array",
+                        "items": {}
+                    },
+                    "duration":{
+                        "type": "string",
+                        "format": "duration"
+                    },
+                    "complexity":{
+                        "type": "string",
+                        "enum": ["simple", "challenging", "hard"]
+                    },
+                    "affordability":{
+                        "type": "string",
+                        "enum": ["affordable", "pricey", "luxurious"]
+                    },
+                    "is_gluten_free":{
+                        "type": "boolean"
+                    },
+                    "is_lactose_free":{
+                        "type": "boolean"
+                    },
+                    "is_vegan":{
+                        "type": "boolean"
+                    },
+                    "created_at":{
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updated_at":{
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                }
+            },
+            "UnauthorizeResponse":{
+                "type": "object",
+                "properties": {
+                    "code":{
+                        "type": "number"
+                    },
+                    "status":{
+                        "type": "string"
+                    },
+                    "data":{
+                        "type": "object",
+                        "properties": {
+                            "error": {
+                                "type": "string",
+                                "example":"unauthorize, login instead"
+                            }
+                        }
+                    }
+                }
+            },
+            "ForbiddenResponse":{
+                "type": "object",
+                "properties": {
+                    "code":{
+                        "type": "number"
+                    },
+                    "status":{
+                        "type": "string"
+                    },
+                    "data":{
+                        "type": "object",
+                        "properties": {
+                            "error": {
+                                "type": "string",
+                                "example":"forbidden, you are not allowed"
+                            }
+                        }
+                    }
+                }
+            },
+            "MealRecipeNotFound":{
+                "type": "object",
+                "properties": {
+                    "code":{
+                        "type": "number"
+                    },
+                    "status":{
+                        "type": "string"
+                    },
+                    "data":{
+                        "type": "object",
+                        "properties": {
+                            "error": {
+                                "type": "string",
+                                "example":"meal recipe not found"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "securitySchemes": {
+            "bearerAuth":{
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT"
+            }
+        }
+    },
+    "security": [{
+        "bearerAuth":[]
+    }]
+  }
